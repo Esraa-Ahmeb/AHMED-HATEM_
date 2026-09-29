@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الصف | الخبير أحمد حاتم</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Tahoma","Arial",sans-serif;background:#f7f9fc;color:#172033;line-height:1.8}
+header{background:white;box-shadow:0 2px 15px rgba(0,0,0,.08);padding:18px 7%}
+.nav{max-width:1200px;margin:auto;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:24px;font-weight:bold;color:#123c69}.logo span{color:#d89b28}
+.back{text-decoration:none;color:white;background:#123c69;padding:9px 18px;border-radius:8px;font-weight:bold}
+.hero{background:#123c69;color:white;text-align:center;padding:80px 7%}
+.hero h1{font-size:42px;margin-bottom:10px}.hero p{color:#dce8f3}
+.container{max-width:1100px;margin:auto;padding:70px 7%}
+.title{text-align:center;margin-bottom:40px}.title h2{color:#123c69;font-size:32px}
+.groups{display:grid;grid-template-columns:repeat(3,1fr);gap:25px}
+.group{background:white;padding:28px;border-radius:15px;box-shadow:0 8px 25px rgba(0,0,0,.07);border-top:4px solid #d89b28}
+.group h3{color:#123c69;margin-bottom:20px}
+.info{margin-bottom:13px;color:#5f6b7b}.info strong{color:#123c69}
+.empty{color:#999}
+.whatsapp{display:block;width:fit-content;margin:45px auto 0;background:#25D366;color:white;text-decoration:none;padding:13px 25px;border-radius:8px;font-weight:bold}
+footer{background:#0c2b4c;color:white;text-align:center;padding:25px}
+.notice{background:white;padding:25px;border-radius:15px;text-align:center;box-shadow:0 8px 25px rgba(0,0,0,.07)}
+@media(max-width:800px){.groups{grid-template-columns:1fr}.hero h1{font-size:32px}.nav{gap:10px}.logo{font-size:19px}.back{padding:7px 12px;font-size:13px}}
+</style>
+</head>
+<body>
+<header><div class="nav">
+<div class="logo">الخبير <span>أحمد حاتم</span></div>
+<a href="index.html#grades" class="back">← العودة للصفوف</a>
+</div></header>
+
+<section class="hero">
+<h1 id="gradeTitle">جاري التحميل...</h1>
+<p>مواعيد مجموعات اللغة العربية</p>
+</section>
+
+<main class="container">
+<div class="title">
+<h2>مواعيد المجموعات</h2>
+<p>المواعيد والسناتر يتم تحديثها تلقائيًا من لوحة التحكم</p>
+</div>
+<div class="groups" id="groups">
+<div class="notice">جاري تحميل المجموعات...</div>
+</div>
+
+<a href="https://wa.me/201201441315" target="_blank" class="whatsapp">💬 للاستفسار عبر واتساب</a>
+</main>
+
+<footer>الخبير أحمد حاتم | مدرس اللغة العربية</footer>
+
+<script>
+const SUPABASE_URL = "https://qsnvynkdpnklhhcluzet.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_7SBSIqTTqNKSFr70wd6PVA_APtbN7Yj";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+function escapeHtml(value){
+    return String(value ?? "").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]));
+}
+
+async function loadGrade(){
+    const id = Number(new URLSearchParams(location.search).get("id"));
+    const title = document.getElementById("gradeTitle");
+    const box = document.getElementById("groups");
+
+    if(!id){
+        title.textContent = "الصف غير محدد";
+        box.innerHTML = '<div class="notice">الرابط غير صحيح.</div>';
+        return;
+    }
+
+    const {data: grade, error: gradeError} =
+        await supabaseClient.from("grades").select("id,name").eq("id",id).eq("is_visible",true).maybeSingle();
+
+    if(gradeError || !grade){
+        title.textContent = "الصف غير متاح";
+        box.innerHTML = '<div class="notice">هذا الصف غير متاح حاليًا.</div>';
+        return;
+    }
+
+    title.textContent = "📚 " + grade.name;
+
+    const [{data: groups,error: groupsError},{data: centers,error: centersError}] =
+        await Promise.all([
+            supabaseClient.from("groups").select("id,name,day,time,center_id").eq("grade_id",id).eq("is_visible",true).order("id"),
+            supabaseClient.from("centers").select("id,name").eq("is_visible",true).order("id")
+        ]);
+
+    if(groupsError || centersError){
+        box.innerHTML = '<div class="notice">تعذر تحميل المواعيد. حاول تحديث الصفحة.</div>';
+        console.error(groupsError || centersError);
+        return;
+    }
+
+    const centerMap = Object.fromEntries((centers || []).map(c=>[c.id,c.name]));
+
+    if(!groups || groups.length===0){
+        box.innerHTML = '<div class="notice">لا توجد مجموعات متاحة لهذا الصف حاليًا.</div>';
+        return;
+    }
+
+    box.innerHTML = groups.map(g=>`
+        <div class="group">
+            <h3>${escapeHtml(g.name)}</h3>
+            <div class="info"><strong>📅 اليوم:</strong> <span>${escapeHtml(g.day || "لم يحدد بعد")}</span></div>
+            <div class="info"><strong>⏰ الساعة:</strong> <span>${escapeHtml(g.time || "لم تحدد بعد")}</span></div>
+            <div class="info"><strong>📍 السنتر:</strong> <span>${escapeHtml(centerMap[g.center_id] || "لم يحدد بعد")}</span></div>
+        </div>
+    `).join("");
+}
+
+loadGrade();
+</script>
+</body>
+</html>

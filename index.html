@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<title>الخبير أحمد حاتم | مدرس اللغة العربية</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "Tahoma", "Arial", sans-serif;
+    background: #f7f9fc;
+    color: #172033;
+    line-height: 1.8;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1000;
+    background: rgba(255,255,255,.96);
+    box-shadow: 0 2px 15px rgba(0,0,0,.08);
+    backdrop-filter: blur(10px);
+}
+
+.nav {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    min-height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #123c69;
+}
+
+.logo span {
+    color: #d89b28;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 28px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #172033;
+    font-weight: bold;
+    transition: .3s;
+}
+
+nav a:hover {
+    color: #d89b28;
+}
+
+.menu-btn {
+    display: none;
+    border: none;
+    background: #123c69;
+    color: white;
+    font-size: 24px;
+    padding: 7px 13px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* Hero */
+.hero {
+    min-height: 100vh;
+    padding: 140px 7% 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        linear-gradient(
+            rgba(18,60,105,.94),
+            rgba(18,60,105,.94)
+        ),
+        radial-gradient(
+            circle at top right,
+            #d89b28,
+            transparent 35%
+        );
+    color: white;
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 900px;
+}
+
+.badge {
+    display: inline-block;
+    background: rgba(255,255,255,.13);
+    border: 1px solid rgba(255,255,255,.25);
+    padding: 8px 18px;
+    border-radius: 50px;
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    font-size: 52px;
+    margin-bottom: 15px;
+}
+
+.hero h1 span {
+    color: #f0bd4d;
+}
+
+.hero p {
+    font-size: 21px;
+    max-width: 700px;
+    margin: 0 auto 30px;
+    color: #eef4fa;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-block;
+    padding: 13px 27px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: .3s;
+}
+
+.btn-primary {
+    background: #d89b28;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #bb811b;
+    transform: translateY(-2px);
+}
+
+.btn-outline {
+    border: 2px solid white;
+    color: white;
+}
+
+.btn-outline:hover {
+    background: white;
+    color: #123c69;
+}
+
+/* General */
+section {
+    padding: 90px 7%;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-title h2 {
+    font-size: 36px;
+    color: #123c69;
+    margin-bottom: 10px;
+}
+
+.section-title p {
+    color: #6d7787;
+}
+
+/* About */
+.about {
+    background: white;
+}
+
+.about-content {
+    max-width: 1100px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 50px;
+    align-items: center;
+}
+
+.teacher-box {
+    min-height: 350px;
+    border-radius: 20px;
+    background:
+        linear-gradient(
+            135deg,
+            #123c69,
+            #1e5b94
+        );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 100px;
+    box-shadow: 0 15px 35px rgba(18,60,105,.2);
+}
+
+.about-text h3 {
+    color: #123c69;
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.about-text p {
+    color: #5f6b7b;
+    margin-bottom: 18px;
+}
+
+.about-list {
+    list-style: none;
+}
+
+.about-list li {
+    margin-bottom: 10px;
+    color: #273449;
+}
+
+.about-list li::before {
+    content: "✓";
+    color: #d89b28;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+/* Cards */
+.cards {
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.07);
+    transition: .3s;
+    border-top: 4px solid #d89b28;
+}
+
+.card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 15px 35px rgba(0,0,0,.11);
+}
+
+.card-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.card h3 {
+    color: #123c69;
+    margin-bottom: 10px;
+    font-size: 22px;
+}
+
+.card p {
+    color: #6a7484;
+}
+
+/* Grade links */
+.grade-card {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    cursor: pointer;
+}
+
+.details-btn {
+    display: inline-block;
+    margin-top: 18px;
+    background: #123c69;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Centers */
+.centers {
+    background: #f1f5f9;
+}
+
+.center-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.center-card::after {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: rgba(216,155,40,.08);
+    border-radius: 50%;
+    top: -35px;
+    left: -35px;
+}
+
+.location {
+    color: #d89b28;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 15px;
+}
+
+.tag {
+    background: #e8eef5;
+    color: #123c69;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+}
+
+/* Features */
+.features {
+    background: #123c69;
+    color: white;
+}
+
+.features .section-title h2 {
+    color: white;
+}
+
+.features .section-title p {
+    color: #cbd9e8;
+}
+
+.features-grid {
+    max-width: 1100px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.feature {
+    text-align: center;
+    padding: 25px 15px;
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 14px;
+}
+
+.feature-icon {
+    font-size: 38px;
+    margin-bottom: 10px;
+}
+
+.feature h3 {
+    margin-bottom: 8px;
+}
+
+.feature p {
+    color: #d5e0eb;
+    font-size: 14px;
+}
+
+/* Reviews */
+.reviews {
+    background: white;
+}
+
+.review-card {
+    border-top: 0;
+    border-right: 4px solid #d89b28;
+}
+
+.stars {
+    color: #d89b28;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.review-text {
+    color: #606b7b;
+    margin-bottom: 15px;
+}
+
+.review-name {
+    font-weight: bold;
+    color: #123c69;
+}
+
+/* Contact */
+.contact {
+    background: #f1f5f9;
+}
+
+.contact-container {
+    max-width: 1100px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 35px;
+}
+
+.contact-box,
+.contact-form {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.06);
+}
+
+.contact-box h3,
+.contact-form h3 {
+    color: #123c69;
+    margin-bottom: 20px;
+    font-size: 25px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 18px;
+    color: #566173;
+}
+
+.contact-item-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #eef3f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+}
+
+.contact-item a {
+    color: #123c69;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    color: #273449;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #dce2e9;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 15px;
+    outline: none;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 110px;
+}
+
+.submit-btn {
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 16px;
+}
+
+/* Footer */
+footer {
+    background: #0c2b4c;
+    color: white;
+    padding: 30px 7%;
+    text-align: center;
+}
+
+footer p {
+    color: #c7d3df;
+    font-size: 14px;
+}
+
+.footer-logo {
+    font-size: 23px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.footer-logo span {
+    color: #d89b28;
+}
+
+/* WhatsApp */
+.whatsapp {
+    position: fixed;
+    bottom: 22px;
+    left: 22px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: #25D366;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 29px;
+    text-decoration: none;
+    box-shadow: 0 7px 20px rgba(0,0,0,.2);
+    z-index: 999;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .about-content {
+        grid-template-columns: 1fr;
+    }
+
+    .teacher-box {
+        min-height: 250px;
+    }
+}
+
+@media (max-width: 700px) {
+
+    .nav {
+        min-height: 65px;
+    }
+
+    .logo {
+        font-size: 19px;
+    }
+
+    .menu-btn {
+        display: block;
+    }
+
+    nav {
+        position: absolute;
+        top: 65px;
+        right: 0;
+        left: 0;
+        background: white;
+        display: none;
+        box-shadow: 0 10px 20px rgba(0,0,0,.08);
+    }
+
+    nav.active {
+        display: block;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    nav li {
+        border-bottom: 1px solid #eee;
+    }
+
+    nav a {
+        display: block;
+        padding: 13px 7%;
+    }
+
+    .hero {
+        padding-top: 120px;
+    }
+
+    .hero h1 {
+        font-size: 37px;
+    }
+
+    .hero p {
+        font-size: 17px;
+    }
+
+    section {
+        padding: 70px 5%;
+    }
+
+    .section-title h2 {
+        font-size: 29px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-container {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="nav">
+
+<div class="logo">
+الخبير <span>أحمد حاتم</span>
+</div>
+
+<button class="menu-btn" onclick="toggleMenu()">
+☰
+</button>
+
+<nav id="mainNav">
+
+<ul>
+
+<li><a href="#home">الرئيسية</a></li>
+<li><a href="#about">عن المدرس</a></li>
+<li><a href="#grades">الصفوف</a></li>
+<li><a href="#centers">السناتر</a></li>
+<li><a href="#features">المميزات</a></li>
+<li><a href="#reviews">آراء الطلاب</a></li>
+<li><a href="#contact">تواصل معنا</a></li>
+
+</ul>
+
+</nav>
+
+</div>
+
+</header>
+
+
+<section class="hero" id="home">
+
+<div class="hero-content">
+
+<div class="badge">
+📚 حصص حضورية داخل السناتر
+</div>
+
+<h1>
+الخبير <span>أحمد حاتم</span>
+</h1>
+
+<p>
+مدرس اللغة العربية
+<br>
+شرح مبسط • متابعة مستمرة • مراجعات شاملة
+</p>
+
+<div class="hero-buttons">
+
+<a href="#contact" class="btn btn-primary">
+احجز حصتك الآن
+</a>
+
+<a href="#grades" class="btn btn-outline">
+تعرف على الصفوف
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="about" id="about">
+
+<div class="section-title">
+
+<h2>
+عن الخبير أحمد حاتم
+</h2>
+
+<p>
+تعليم اللغة العربية بطريقة بسيطة وواضحة
+</p>
+
+</div>
+
+<div class="about-content">
+
+<div class="teacher-box">
+👨‍🏫
+</div>
+
+<div class="about-text">
+
+<h3>
+الخبير أحمد حاتم
+</h3>
+
+<p>
+مدرس اللغة العربية، يقدم حصصًا حضورية داخل السناتر
+التعليمية، مع الاهتمام بشرح المنهج بطريقة واضحة
+ومناسبة لكل طالب.
+</p>
+
+<p>
+الهدف هو مساعدة الطالب على فهم المادة بشكل جيد،
+والتدريب المستمر على الأسئلة والمراجعة.
+</p>
+
+<ul class="about-list">
+
+<li>شرح مبسط ومنظم للمنهج</li>
+<li>تدريبات وأسئلة متنوعة</li>
+<li>مراجعات قبل الاختبارات</li>
+<li>حصص حضورية داخل السناتر</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section id="grades">
+
+<div class="section-title">
+<h2>الصفوف الدراسية</h2>
+<p>اضغط على الصف لمعرفة مواعيد المجموعات والسناتر</p>
+</div>
+
+<div class="cards" id="dynamicGrades">
+<div class="card">
+<div class="card-icon">📚</div>
+<h3>جاري تحميل الصفوف...</h3>
+</div>
+</div>
+
+</section>
+
+<section class="centers" id="centers">
+
+<div class="section-title">
+<h2>السناتر التعليمية</h2>
+<p>الحصص حضوريًا داخل السناتر التعليمية</p>
+</div>
+
+<div class="cards" id="dynamicCenters">
+<div class="card center-card">
+<div class="card-icon">📍</div>
+<h3>جاري تحميل السناتر...</h3>
+</div>
+</div>
+
+</section>
+
+<section class="features" id="features">
+
+<div class="section-title">
+
+<h2>
+مميزات الحصص
+</h2>
+
+<p>
+اهتمام بالفهم والمتابعة والتدريب
+</p>
+
+</div>
+
+<div class="features-grid">
+
+<div class="feature">
+
+<div class="feature-icon">
+📚
+</div>
+
+<h3>
+شرح مبسط
+</h3>
+
+<p>
+توضيح الدروس بطريقة سهلة
+ومنظمة.
+</p>
+
+</div>
+
+
+<div class="feature">
+
+<div class="feature-icon">
+📝
+</div>
+
+<h3>
+تدريبات
+</h3>
+
+<p>
+التدريب على الأسئلة
+المختلفة.
+</p>
+
+</div>
+
+
+<div class="feature">
+
+<div class="feature-icon">
+🎯
+</div>
+
+<h3>
+متابعة
+</h3>
+
+<p>
+متابعة مستوى الطالب
+أثناء الدراسة.
+</p>
+
+</div>
+
+
+<div class="feature">
+
+<div class="feature-icon">
+🏆
+</div>
+
+<h3>
+مراجعات
+</h3>
+
+<p>
+مراجعة الدروس والاستعداد
+للاختبارات.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="reviews" id="reviews">
+
+<div class="section-title">
+
+<h2>
+آراء الطلاب
+</h2>
+
+<p>
+بعض الانطباعات عن الحصص
+</p>
+
+</div>
+
+<div class="cards">
+
+<div class="card review-card">
+
+<div class="stars">
+★★★★★
+</div>
+
+<p class="review-text">
+الشرح بسيط وواضح، والأسئلة
+بتساعد على فهم الدرس بشكل أفضل.
+</p>
+
+<div class="review-name">
+طالب
+</div>
+
+</div>
+
+
+<div class="card review-card">
+
+<div class="stars">
+★★★★★
+</div>
+
+<p class="review-text">
+الحصة منظمة والمراجعة بتساعد
+جداً في تثبيت المعلومات.
+</p>
+
+<div class="review-name">
+طالب
+</div>
+
+</div>
+
+
+<div class="card review-card">
+
+<div class="stars">
+★★★★★
+</div>
+
+<p class="review-text">
+طريقة الشرح سهلة والتدريب
+على الأسئلة مفيد.
+</p>
+
+<div class="review-name">
+طالب
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="contact" id="contact">
+
+<div class="section-title">
+
+<h2>
+تواصل معنا
+</h2>
+
+<p>
+للحجز والاستفسار عن الحصص
+</p>
+
+</div>
+
+<div class="contact-container">
+
+<div class="contact-box">
+
+<h3>
+بيانات التواصل
+</h3>
+
+<div class="contact-item">
+
+<div class="contact-item-icon">
+📱
+</div>
+
+<div>
+
+<strong>
+رقم الهاتف
+</strong>
+
+<br>
+
+<a href="tel:01201441315">
+01201441315
+</a>
+
+</div>
+
+</div>
+
+
+<div class="contact-item">
+
+<div class="contact-item-icon">
+💬
+</div>
+
+<div>
+
+<strong>
+واتساب
+</strong>
+
+<br>
+
+<a
+href="https://wa.me/201201441315"
+target="_blank"
+>
+تواصل عبر واتساب
+</a>
+
+</div>
+
+</div>
+
+
+<div class="contact-item">
+
+<div class="contact-item-icon">
+📍
+</div>
+
+<div>
+
+<strong>
+أماكن الحصص
+</strong>
+
+<br>
+
+النجدة - عذبة السوق
+
+</div>
+
+</div>
+
+
+<div class="contact-item">
+
+<div class="contact-item-icon">
+🏫
+</div>
+
+<div>
+
+<strong>
+نظام الحصص
+</strong>
+
+<br>
+
+حصص حضورية داخل السناتر
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="contact-form">
+
+<h3>
+اترك بياناتك
+</h3>
+
+<form id="contactForm">
+
+<div class="form-group">
+
+<label>
+الاسم
+</label>
+
+<input
+type="text"
+id="name"
+placeholder="اكتب اسمك"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+رقم الهاتف
+</label>
+
+<input
+type="tel"
+id="phone"
+placeholder="اكتب رقم الهاتف"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+الصف الدراسي
+</label>
+
+<select id="grade" required>
+
+<option value="">
+اختر الصف
+</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+المجموعة
+</label>
+
+<select id="group" required disabled>
+
+<option value="">
+اختر الصف أولًا
+</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+الرسالة
+</label>
+
+<textarea
+id="message"
+placeholder="اكتب استفسارك هنا..."
+></textarea>
+
+</div>
+
+
+<button
+type="submit"
+class="btn btn-primary submit-btn"
+>
+إرسال طلب الحجز
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</section>
+
+
+<footer>
+
+<div class="footer-logo">
+الخبير <span>أحمد حاتم</span>
+</div>
+
+<p>
+مدرس اللغة العربية | حصص حضورية داخل السناتر
+</p>
+
+<p style="margin-top:8px;">
+© 2026 جميع الحقوق محفوظة
+</p>
+
+</footer>
+
+
+<a
+class="whatsapp"
+href="https://wa.me/201201441315"
+target="_blank"
+aria-label="تواصل عبر واتساب"
+>
+💬
+</a>
+
+
+<script>
+
+function toggleMenu() {
+
+    document
+    .getElementById("mainNav")
+    .classList.toggle("active");
+
+}
+
+
+document
+.querySelectorAll("#mainNav a")
+.forEach(function(link) {
+
+    link.addEventListener("click", function() {
+
+        document
+        .getElementById("mainNav")
+        .classList.remove("active");
+
+    });
+
+});
+
+
+// ربط الموقع بقاعدة بيانات Supabase
+
+// تحميل الصفوف والسناتر من Supabase بدون تغيير تصميم الموقع
+async function loadSiteContent() {
+    const gradesBox = document.getElementById("dynamicGrades");
+    const centersBox = document.getElementById("dynamicCenters");
+
+    const [
+        { data: grades, error: gradesError },
+        { data: centers, error: centersError }
+    ] = await Promise.all([
+        supabaseClient.from("grades").select("id,name").eq("is_visible", true).order("id"),
+        supabaseClient.from("centers").select("id,name").eq("is_visible", true).order("id")
+    ]);
+
+    if (gradesError) {
+        gradesBox.innerHTML = '<div class="card"><h3>تعذر تحميل الصفوف</h3><p>حاول تحديث الصفحة.</p></div>';
+        console.error(gradesError);
+    } else if (!grades || grades.length === 0) {
+        gradesBox.innerHTML = '<div class="card"><h3>لا توجد صفوف متاحة حاليًا</h3></div>';
+    } else {
+        gradesBox.innerHTML = grades.map((g, i) => `
+            <a href="grade.html?id=${encodeURIComponent(g.id)}" class="card grade-card">
+                <div class="card-icon">${["📘","📗","📙","📕","📔","📚"][i % 6]}</div>
+                <h3>${escapeHtml(g.name)}</h3>
+                <p>شرح ومراجعة منهج اللغة العربية مع التدريب على الأسئلة.</p>
+                <span class="details-btn">عرض المواعيد ←</span>
+            </a>
+        `).join("");
+    }
+
+    if (centersError) {
+        centersBox.innerHTML = '<div class="card center-card"><h3>تعذر تحميل السناتر</h3><p>حاول تحديث الصفحة.</p></div>';
+        console.error(centersError);
+    } else if (!centers || centers.length === 0) {
+        centersBox.innerHTML = '<div class="card center-card"><h3>لا توجد سناتر متاحة حاليًا</h3></div>';
+    } else {
+        centersBox.innerHTML = centers.map(c => `
+            <div class="card center-card">
+                <div class="card-icon">📍</div>
+                <h3>${escapeHtml(c.name)}</h3>
+                <div class="location">العنوان: ${escapeHtml(c.name)}</div>
+                <p>حصص حضورية ومجموعات تعليمية للغة العربية.</p>
+                <div class="tags">
+                    <span class="tag">حصص حضورية</span>
+                    <span class="tag">لغة عربية</span>
+                </div>
+            </div>
+        `).join("");
+    }
+}
+
+
+const SUPABASE_URL = "https://qsnvynkdpnklhhcluzet.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_7SBSIqTTqNKSFr70wd6PVA_APtbN7Yj";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+loadSiteContent();
+
+let siteGrades = [];
+let siteGroups = [];
+
+async function loadBookingOptions() {
+    const gradeSelect = document.getElementById("grade");
+    const groupSelect = document.getElementById("group");
+
+    const { data: grades, error: gradesError } = await supabaseClient
+        .from("grades")
+        .select("id,name")
+        .eq("is_visible", true)
+        .order("id");
+
+    if (gradesError) {
+        console.error(gradesError);
+        return;
+    }
+
+    siteGrades = grades || [];
+    gradeSelect.innerHTML = '<option value="">اختر الصف</option>' +
+        siteGrades.map(g => `<option value="${g.id}">${escapeHtml(g.name)}</option>`).join("");
+
+    const { data: groups, error: groupsError } = await supabaseClient
+        .from("groups")
+        .select("id,name,grade_id,day,time,center_id")
+        .eq("is_visible", true)
+        .order("id");
+
+    if (groupsError) {
+        console.error(groupsError);
+        return;
+    }
+
+    siteGroups = groups || [];
+
+    gradeSelect.addEventListener("change", function() {
+        const gradeId = Number(this.value);
+        const matching = siteGroups.filter(g => Number(g.grade_id) === gradeId);
+        groupSelect.disabled = matching.length === 0;
+        groupSelect.innerHTML = matching.length
+            ? '<option value="">اختر المجموعة</option>' + matching.map(g => `<option value="${g.id}">${escapeHtml(g.name)}${g.day ? ' — ' + escapeHtml(g.day) : ''}${g.time ? ' — ' + escapeHtml(g.time) : ''}</option>`).join("")
+            : '<option value="">لا توجد مجموعات متاحة حاليًا</option>';
+    });
+}
+
+function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>'"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[c]));
+}
+
+loadBookingOptions();
+
+document
+.getElementById("contactForm")
+.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const button = this.querySelector("button[type=submit]");
+    button.disabled = true;
+    button.textContent = "جاري إرسال الطلب...";
+
+    const name = document.getElementById("name").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const gradeId = Number(document.getElementById("grade").value);
+    const groupId = Number(document.getElementById("group").value);
+    const message = document.getElementById("message").value.trim();
+
+    const { error } = await supabaseClient
+        .from("booking_requests")
+        .insert({
+            name,
+            phone,
+            grade_id: gradeId,
+            group_id: groupId,
+            message,
+            status: "pending"
+        });
+
+    if (error) {
+        console.error(error);
+        alert("حصل خطأ أثناء إرسال الطلب. حاول مرة أخرى.");
+        button.disabled = false;
+        button.textContent = "إرسال طلب الحجز";
+        return;
+    }
+
+    alert("تم إرسال طلب الحجز بنجاح. سيتم التواصل معك بعد مراجعة الطلب.");
+    this.reset();
+    document.getElementById("group").disabled = true;
+    document.getElementById("group").innerHTML = '<option value="">اختر الصف أولًا</option>';
+    button.disabled = false;
+    button.textContent = "إرسال طلب الحجز";
+});
+
+</script>
+
+</body>
+</html>
