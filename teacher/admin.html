@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>لوحة التحكم | الخبير أحمد حاتم</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#f5f7fb;color:#172033}
+header{background:#123c69;color:#fff;padding:16px 22px;position:sticky;top:0;z-index:10}
+.top{max-width:1250px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:15px}.brand{font-size:21px;font-weight:bold}.brand span{color:#f0bd4d}
+button,.btn{border:0;border-radius:8px;padding:10px 15px;cursor:pointer;font-weight:bold}.logout{background:#fff;color:#123c69}
+.wrap{max-width:1250px;margin:25px auto;padding:0 15px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}.tab{background:#fff;color:#123c69;border:1px solid #e1e6ed}.tab.active{background:#d89b28;color:#fff;border-color:#d89b28}
+.panel{display:none}.panel.active{display:block}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px}.stat{background:#fff;padding:20px;border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,.05)}.stat b{font-size:30px;color:#123c69;display:block}
+.card{background:#fff;border-radius:14px;padding:18px;margin-top:18px;box-shadow:0 4px 16px rgba(0,0,0,.05)}h2{color:#123c69;margin-top:0}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}input,select,textarea{padding:11px;border:1px solid #d9e0e8;border-radius:8px;font-family:inherit;min-width:0}input,select{width:100%}.field{flex:1;min-width:160px}.primary{background:#123c69;color:#fff}.gold{background:#d89b28;color:#fff}.danger{background:#c0392b;color:#fff}.muted{color:#6d7787}
+table{width:100%;border-collapse:collapse;margin-top:12px}th,td{padding:10px;border-bottom:1px solid #edf0f4;text-align:right;vertical-align:middle}th{background:#f7f9fc;color:#123c69}
+.actions{display:flex;gap:6px;flex-wrap:wrap}.small{padding:7px 10px;font-size:13px}
+.notice{padding:12px;border-radius:8px;background:#fff8e8;color:#795b00;margin-bottom:15px}
+.empty{text-align:center;color:#7a8492;padding:25px}
+@media(max-width:700px){.top{align-items:flex-start}.tabs{overflow:auto;flex-wrap:nowrap}.tab{white-space:nowrap}table{font-size:13px}th,td{padding:7px}}
+</style>
+</head>
+<body>
+<header><div class="top"><div class="brand">لوحة تحكم <span>الخبير أحمد حاتم</span></div><button class="logout" id="logout">تسجيل الخروج</button></div></header>
+
+<main class="wrap">
+  <div id="authNotice" class="notice" style="display:none"></div>
+  <div class="tabs">
+    <button class="tab active" data-panel="home">الرئيسية</button>
+    <button class="tab" data-panel="grades">الصفوف والمجموعات</button>
+    <button class="tab" data-panel="centers">السناتر</button>
+    <button class="tab" data-panel="requests">طلبات الحجز</button>
+    <button class="tab" data-panel="students">الطلاب</button>
+    <button class="tab" data-panel="results">النتائج</button>
+    <button class="tab" data-panel="attendance">الحضور والغياب</button>
+  </div>
+
+  <section id="home" class="panel active">
+    <div class="grid">
+      <div class="stat"><span>الطلاب</span><b id="sStudents">0</b></div>
+      <div class="stat"><span>طلبات معلقة</span><b id="sRequests">0</b></div>
+      <div class="stat"><span>الصفوف</span><b id="sGrades">0</b></div>
+      <div class="stat"><span>المجموعات</span><b id="sGroups">0</b></div>
+      <div class="stat"><span>السناتر</span><b id="sCenters">0</b></div>
+    </div>
+    <div class="card"><h2>مرحبًا بك 👋</h2><p class="muted">من هنا تقدر تدير الصفوف والمجموعات والطلاب والطلبات والنتائج والحضور.</p></div>
+  </section>
+
+  <section id="grades" class="panel">
+    <div class="card">
+      <h2>الصفوف</h2>
+      <form id="gradeForm" class="row">
+        <div class="field"><input id="gradeName" placeholder="اسم الصف" required></div>
+        <button class="gold">إضافة صف</button>
+      </form>
+      <div id="gradesTable"></div>
+    </div>
+    <div class="card">
+      <h2>إضافة مجموعة</h2>
+      <form id="groupForm" class="row">
+        <div class="field"><select id="groupGrade" required></select></div>
+        <div class="field"><input id="groupName" placeholder="اسم المجموعة" required></div>
+        <div class="field"><input id="groupDay" placeholder="اليوم"></div>
+        <div class="field"><input id="groupTime" placeholder="الوقت"></div>
+        <div class="field"><select id="groupCenter"><option value="">بدون سنتر</option></select></div>
+        <button class="gold">إضافة مجموعة</button>
+      </form>
+      <div id="groupsTable"></div>
+    </div>
+  </section>
+
+  <section id="centers" class="panel">
+    <div class="card"><h2>السناتر</h2>
+      <form id="centerForm" class="row"><div class="field"><input id="centerName" placeholder="اسم السنتر" required></div><button class="gold">إضافة سنتر</button></form>
+      <div id="centersTable"></div>
+    </div>
+  </section>
+
+  <section id="requests" class="panel"><div class="card"><h2>طلبات الحجز</h2><div id="requestsTable"></div></div></section>
+
+  <section id="students" class="panel">
+    <div class="card"><h2>الطلاب</h2><div class="row"><div class="field"><input id="studentSearch" placeholder="بحث بالاسم أو الهاتف"></div></div><div id="studentsTable"></div></div>
+  </section>
+
+  <section id="results" class="panel">
+    <div class="card"><h2>إضافة نتيجة</h2>
+      <form id="resultForm" class="row">
+        <div class="field"><select id="resultStudent" required></select></div>
+        <div class="field"><input id="testName" placeholder="اسم الاختبار" required></div>
+        <div class="field"><input id="score" type="number" step="0.01" placeholder="الدرجة"></div>
+        <div class="field"><input id="maxScore" type="number" step="0.01" placeholder="من"></div>
+        <div class="field"><input id="testDate" type="date"></div>
+        <button class="gold">إضافة</button>
+      </form>
+      <div id="resultsTable"></div>
+    </div>
+  </section>
+
+  <section id="attendance" class="panel">
+    <div class="card"><h2>تسجيل الحضور</h2>
+      <form id="attendanceForm" class="row">
+        <div class="field"><select id="attendanceStudent" required></select></div>
+        <div class="field"><input id="attendanceDate" type="date" required></div>
+        <div class="field"><select id="attendanceStatus"><option value="present">حاضر</option><option value="absent">غائب</option><option value="late">متأخر</option></select></div>
+        <div class="field"><input id="attendanceNotes" placeholder="ملاحظات"></div>
+        <button class="gold">حفظ</button>
+      </form>
+      <div id="attendanceTable"></div>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+let grades=[], centers=[], groups=[], students=[], requests=[], results=[], attendance=[];
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+const today=new Date().toISOString().slice(0,10); $("testDate").value=today; $("attendanceDate").value=today;
+
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));b.classList.add("active");$(b.dataset.panel).classList.add("active");});
+
+async function loadAll(){
+  const [g,c,gr,s,r,re,a]=await Promise.all([
+    supabaseClient.from("grades").select("*").order("id"),
+    supabaseClient.from("centers").select("*").order("id"),
+    supabaseClient.from("groups").select("*").order("id"),
+    supabaseClient.from("students").select("*").order("id",{ascending:false}),
+    supabaseClient.from("booking_requests").select("*").order("id",{ascending:false}),
+    supabaseClient.from("results").select("*").order("id",{ascending:false}),
+    supabaseClient.from("attendance").select("*").order("attendance_date",{ascending:false})
+  ]);
+  for(const x of [g,c,gr,s,r,re,a]) if(x.error){console.error(x.error); throw x.error}
+  grades=g.data||[]; centers=c.data||[]; groups=gr.data||[]; students=s.data||[]; requests=r.data||[]; results=re.data||[]; attendance=a.data||[];
+  render();
+}
+function render(){
+  $("sStudents").textContent=students.length;$("sRequests").textContent=requests.filter(x=>x.status==="pending").length;$("sGrades").textContent=grades.length;$("sGroups").textContent=groups.length;$("sCenters").textContent=centers.length;
+  $("groupGrade").innerHTML=grades.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");
+  $("groupCenter").innerHTML='<option value="">بدون سنتر</option>'+centers.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");
+  const studentOptions=students.map(x=>`<option value="${x.id}">${esc(x.name)} — ${esc(x.phone||"")}</option>`).join("");
+  $("resultStudent").innerHTML=studentOptions;$("attendanceStudent").innerHTML=studentOptions;
+  $("gradesTable").innerHTML=grades.length?`<table><tr><th>الصف</th><th>الحالة</th><th>إجراء</th></tr>${grades.map(x=>`<tr><td>${esc(x.name)}</td><td>${x.is_visible?"ظاهر":"مخفي"}</td><td class="actions"><button class="small" onclick="editGrade(${x.id})">تعديل</button><button class="small danger" onclick="del('grades',${x.id})">حذف</button></td></tr>`).join("")}</table>`:'<div class="empty">لا توجد صفوف</div>';
+  $("groupsTable").innerHTML=groups.length?`<table><tr><th>المجموعة</th><th>الصف</th><th>اليوم</th><th>الوقت</th><th>السنتر</th><th>إجراء</th></tr>${groups.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(grades.find(g=>g.id===x.grade_id)?.name||"")}</td><td>${esc(x.day)}</td><td>${esc(x.time)}</td><td>${esc(centers.find(c=>c.id===x.center_id)?.name||"")}</td><td><button class="small danger" onclick="del('groups',${x.id})">حذف</button></td></tr>`).join("")}</table>`:'<div class="empty">لا توجد مجموعات</div>';
+  $("centersTable").innerHTML=centers.length?`<table><tr><th>السنتر</th><th>إجراء</th></tr>${centers.map(x=>`<tr><td>${esc(x.name)}</td><td class="actions"><button class="small" onclick="editCenter(${x.id})">تعديل</button><button class="small danger" onclick="del('centers',${x.id})">حذف</button></td></tr>`).join("")}</table>`:'<div class="empty">لا توجد سناتر</div>';
+  $("requestsTable").innerHTML=requests.length?`<table><tr><th>الاسم</th><th>الهاتف</th><th>الصف</th><th>الرسالة</th><th>الحالة</th><th>إجراء</th></tr>${requests.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.phone)}</td><td>${esc(grades.find(g=>g.id===x.grade_id)?.name||"")}</td><td>${esc(x.message)}</td><td>${esc(x.status)}</td><td class="actions">${x.status==="pending"?`<button class="small primary" onclick="acceptReq(${x.id})">قبول</button><button class="small" onclick="rejectReq(${x.id})">رفض</button>`:""}<button class="small danger" onclick="del('booking_requests',${x.id})">حذف</button></td></tr>`).join("")}</table>`:'<div class="empty">لا توجد طلبات</div>';
+  renderStudents(); renderResults(); renderAttendance();
+}
+function renderStudents(){
+ const q=($("studentSearch").value||"").trim().toLowerCase(); const arr=students.filter(x=>(x.name+" "+(x.phone||"")).toLowerCase().includes(q));
+ $("studentsTable").innerHTML=arr.length?`<table><tr><th>الاسم</th><th>الهاتف</th><th>الصف</th><th>المجموعة</th><th>الحالة</th><th>إجراء</th></tr>${arr.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.phone)}</td><td>${esc(grades.find(g=>g.id===x.grade_id)?.name||"")}</td><td>${esc(groups.find(g=>g.id===x.group_id)?.name||"")}</td><td>${esc(x.status)}</td><td><button class="small danger" onclick="del('students',${x.id})">حذف</button></td></tr>`).join("")}</table>`:'<div class="empty">لا يوجد طلاب</div>';
+}
+function renderResults(){
+ $("resultsTable").innerHTML=results.length?`<table><tr><th>الطالب</th><th>الاختبار</th><th>الدرجة</th><th>التاريخ</th><th>إجراء</th></tr>${results.map(x=>`<tr><td>${esc(students.find(s=>s.id===x.student_id)?.name||"")}</td><td>${esc(x.test_name)}</td><td>${x.score??""} / ${x.max_score??""}</td><td>${esc(x.test_date)}</td><td><button class="small danger" onclick="del('results',${x.id})">حذف</button></td></tr>`).join("")}</table>`:'<div class="empty">لا توجد نتائج</div>';
+}
+function renderAttendance(){
+ const labels={present:"حاضر",absent:"غائب",late:"متأخر"};
+ $("attendanceTable").innerHTML=attendance.length?`<table><tr><th>الطالب</th><th>التاريخ</th><th>الحالة</th><th>ملاحظات</th><th>إجراء</th></tr>${attendance.map(x=>`<tr><td>${esc(students.find(s=>s.id===x.student_id)?.name||"")}</td><td>${esc(x.attendance_date)}</td><td>${labels[x.status]||esc(x.status)}</td><td>${esc(x.notes)}</td><td><button class="small danger" onclick="del('attendance',${x.id})">حذف</button></td></tr>`).join("")}</table>`:'<div class="empty">لا يوجد سجل حضور</div>';
+}
+$("gradeForm").onsubmit=async e=>{e.preventDefault();const {error}=await supabaseClient.from("grades").insert({name:$("gradeName").value.trim()});if(error) return alert(error.message);$("gradeName").value="";await loadAll()};
+$("centerForm").onsubmit=async e=>{e.preventDefault();const {error}=await supabaseClient.from("centers").insert({name:$("centerName").value.trim()});if(error) return alert(error.message);$("centerName").value="";await loadAll()};
+$("groupForm").onsubmit=async e=>{e.preventDefault();const {error}=await supabaseClient.from("groups").insert({grade_id:+$("groupGrade").value,center_id:$("groupCenter").value?+$("groupCenter").value:null,name:$("groupName").value.trim(),day:$("groupDay").value.trim(),time:$("groupTime").value.trim()});if(error) return alert(error.message);e.target.reset();await loadAll()};
+$("resultForm").onsubmit=async e=>{e.preventDefault();const {error}=await supabaseClient.from("results").insert({student_id:+$("resultStudent").value,test_name:$("testName").value.trim(),score:$("score").value===""?null:+$("score").value,max_score:$("maxScore").value===""?null:+$("maxScore").value,test_date:$("testDate").value});if(error)return alert(error.message);e.target.reset();$("testDate").value=today;await loadAll()};
+$("attendanceForm").onsubmit=async e=>{e.preventDefault();const {error}=await supabaseClient.from("attendance").upsert({student_id:+$("attendanceStudent").value,attendance_date:$("attendanceDate").value,status:$("attendanceStatus").value,notes:$("attendanceNotes").value.trim()},{onConflict:"student_id,attendance_date"});if(error)return alert(error.message);$("attendanceNotes").value="";await loadAll()};
+$("studentSearch").oninput=renderStudents;
+window.del=async(table,id)=>{if(!confirm("هل أنت متأكد من الحذف؟"))return;const {error}=await supabaseClient.from(table).delete().eq("id",id);if(error)return alert(error.message);await loadAll()};
+window.editGrade=async id=>{const x=grades.find(a=>a.id===id);const name=prompt("اسم الصف الجديد:",x.name);if(name===null)return;const {error}=await supabaseClient.from("grades").update({name:name.trim()}).eq("id",id);if(error)return alert(error.message);await loadAll()};
+window.editCenter=async id=>{const x=centers.find(a=>a.id===id);const name=prompt("اسم السنتر الجديد:",x.name);if(name===null)return;const {error}=await supabaseClient.from("centers").update({name:name.trim()}).eq("id",id);if(error)return alert(error.message);await loadAll()};
+window.rejectReq=async id=>{const {error}=await supabaseClient.from("booking_requests").update({status:"rejected"}).eq("id",id);if(error)return alert(error.message);await loadAll()};
+window.acceptReq=async id=>{
+ const r=requests.find(x=>x.id===id); if(!r)return;
+ const {error:e1}=await supabaseClient.from("booking_requests").update({status:"accepted"}).eq("id",id); if(e1)return alert(e1.message);
+ const {error:e2}=await supabaseClient.from("students").insert({name:r.name,phone:r.phone,grade_id:r.grade_id,group_id:r.group_id,status:"active",notes:r.message||null});
+ if(e2)return alert("تم قبول الطلب لكن تعذر إنشاء الطالب: "+e2.message); await loadAll();
+};
+$("logout").onclick=async()=>{await supabaseClient.auth.signOut();location.href="login.html"};
+
+(async()=>{
+ const {data:{session}}=await supabaseClient.auth.getSession();
+ if(!session){location.href="login.html";return}
+ try{await loadAll()}catch(e){$("authNotice").style.display="block";$("authNotice").textContent="حدث خطأ في تحميل البيانات: "+e.message}
+})();
+</script>
+</body>
+</html>
